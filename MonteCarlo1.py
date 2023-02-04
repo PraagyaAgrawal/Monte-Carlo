@@ -2,7 +2,7 @@
 #The objective is to find the expected number of rounds until the game ends.
 
 #Importing modules
-import random
+import random #first edit
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
