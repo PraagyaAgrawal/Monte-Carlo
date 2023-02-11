@@ -1,8 +1,9 @@
 import numpy as np
-#A 5x5 array, to simulate a 5x5 lattice
-model = np.full((5,5), -1, dtype=int)
 
 size = 4
+
+#A sizexsize array, to simulate a sizexsize lattice
+model = np.full((size,size), -1, dtype=int)
 
 #Components of hamiltonian: H = - sigma(E_ij) - sigma(J_i)
 #J = energy associated with external field
