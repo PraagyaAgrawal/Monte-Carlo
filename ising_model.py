@@ -48,7 +48,7 @@ def plusone(x):
 	return x
 
 #Running this until complete = True will give all the possible values for the system, which will be used in the partition function Z
-def changemodel(arr):
+def model_change(arr):
 	a = [size - 1, size - 1]
 	while True:
 		if arr[a[0]][a[1]] == 1:
@@ -69,7 +69,7 @@ def Z(T, E, J, arr):
 	sum4 = 0
 	for i in range(2**(size**2)):
 		sum4 += np.exp(- H(E, J, arr) / (k*T) )
-		changemodel(arr)
+		model_change(arr)
 	return sum4
 
 T = 293 #K, during STP
