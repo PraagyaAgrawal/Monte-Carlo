@@ -69,7 +69,7 @@ def Z(T, E, J, arr):
 	sum4 = 0
 	for i in range(2**(size**2)):
 		sum4 += np.exp(- H(E, J, arr) / (k*T) )
-		changemodel(a)
+		changemodel(arr)
 	return sum4
 
 T = 293 #K, during STP
