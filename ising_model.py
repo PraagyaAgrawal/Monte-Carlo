@@ -40,7 +40,7 @@ def H(E, J, arr):
 	return - (E_ij_horizontal(E, arr) + E_ij_vertical(E, arr)) - J_i(J,arr)
 
 #Changes the value of a lattice site from -1 to 1 and vice versa
-def invert_lattice_site(x):
+def plusone(x):
 	if x == -1:
 		x = 1
 	else:
@@ -48,17 +48,17 @@ def invert_lattice_site(x):
 	return x
 
 #Running this until complete = True will give all the possible values for the system, which will be used in the partition function Z
-def model_changer(arr):
+def changemodel(arr):
 	a = [size - 1, size - 1]
 	while True:
 		if arr[a[0]][a[1]] == 1:
-			arr[a[0]][a[1]] = invert_lattice_site(arr[a[0]][a[1]])
+			arr[a[0]][a[1]] = plusone(arr[a[0]][a[1]])
 			if a[1] != 0:
 				a = [a[0], a[1] - 1]
 			else:
 				a = [a[0] - 1, size - 1]
 		else:
-			arr[a[0]][a[1]] = invert_lattice_site(arr[a[0]][a[1]])
+			arr[a[0]][a[1]] = plusone(arr[a[0]][a[1]])
 			break
 
 #Boltzmann constant
@@ -69,7 +69,7 @@ def Z(T, E, J, arr):
 	sum4 = 0
 	for i in range(2**(size**2)):
 		sum4 += np.exp(- H(E, J, arr) / (k*T) )
-		model_changer(arr)
+		changemodel(arr)
 	return sum4
 
 T = 293 #K, during STP
