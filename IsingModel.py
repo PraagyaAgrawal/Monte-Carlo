@@ -278,7 +278,7 @@ spin_Rs_avg = np.zeros(41)
 		spin_Rs = []
 		energy_Rs = []
 		for R in Rs:
-			spins, energies = metropolis_centre(lattice_p, 1000000, B, E, get_energy(lattice_p), R)
+			spins, energies = metropolis_whole(lattice_p, 1000000, B, E, get_energy(lattice_p), R)
 			spin_Rs.append(spins[-100000:].mean())
 			energy_Rs.append(energies[-100000:].mean())
 		spin_Rs = np.array(spin_Rs)/N**2
