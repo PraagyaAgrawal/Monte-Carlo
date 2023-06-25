@@ -232,7 +232,7 @@ spin_Rs_avg = np.zeros(41)
 
 #Functions to display results for removal from the centre
 def plot_centre():
-spin_Rs_avg = np.zeros(41)
+	spin_Rs_avg = np.zeros(41)
 	energy_Rs_avg = np.zeros(41)
 	for i in range(10):
 		Rs = np.arange(0,401,10)
