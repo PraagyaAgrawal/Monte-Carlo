@@ -193,7 +193,7 @@ B = 0.05 #B = 1/kT
 
 #Functions to display results for removal from outisde the centre
 def plot_edge():
-spin_Rs_avg = np.zeros(41)
+	spin_Rs_avg = np.zeros(41)
 	energy_Rs_avg = np.zeros(41)
 	for i in range(10):
 		Rs = np.arange(0,401,10)
@@ -271,7 +271,7 @@ def plot_centre():
 
 #Functions to display results for removal from the whole lattice
 def plot_whole():
-spin_Rs_avg = np.zeros(41)
+	spin_Rs_avg = np.zeros(41)
 	energy_Rs_avg = np.zeros(41)
 	for i in range(10):
 		Rs = np.arange(0,2001,50)
