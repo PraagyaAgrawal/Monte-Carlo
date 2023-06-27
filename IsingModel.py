@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 import numba
 from numba import njit
 from scipy.ndimage import convolve, generate_binary_structure
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
 
 #Creating NxN sized 2D lattices
 def initialize_lattices(N):
@@ -86,8 +88,8 @@ def metropolis_centre(spin_arr, times, B, E, energy, remove): #Function to compu
 	for r in range(remove):
 		val = 0
 		while val == 0:
-			x = np.random.randint(20,30)
-			y = np.random.randint(20,30)
+			x = np.random.randint(15,35)
+			y = np.random.randint(`5,35)
 			val = spin_arr[x,y]
 		spin_arr[x,y] = 0
 	for t in range(0,times-1):
@@ -307,3 +309,95 @@ def plot_whole():
 	Max_energy = energy_Rs_avg.max()
 	Min_energy = energy_Rs_avg.min()
 	print(f"Original = {Original_energy}, Max = {Max_energy}, Min = {Min_energy}")
+
+#Testing model accurary while removing from whole lattice
+def model_whole():
+  spin_Rs_avg = np.zeros(41)
+  energy_Rs_avg = np.zeros(41)
+  for i in range(10):
+    Rs = np.arange(0,2001,50)
+    spin_Rs = []
+    energy_Rs = []
+    for R in Rs:
+      spins, energies = metropolis_whole(lattice_p, 1000000, B, E, get_energy(lattice_p), R)
+      spin_Rs.append((np.array(spins[-100000:])/N**2).mean())
+      energy_Rs.append((np.array(energies[-100000:])/N**2).mean())
+    spin_Rs_avg += spin_Rs
+    energy_Rs_avg += energy_Rs
+  spin_Rs_avg /= 10
+  energy_Rs_avg /= 10
+  spin_Rs_1 = spin_Rs_avg[:-1]
+  spin_Rs_2 = spin_Rs_avg[1:]
+  spin_x_train, spin_x_test, spin_y_train, spin_y_test = train_test_split(spin_Rs_1, spin_Rs_2, test_size = 0.33, random_state = 42)
+  model_spin = LinearRegression().fit(spin_x_train.reshape(-1,1), spin_y_train)
+  print(model_spin.score(spin_x_test.reshape(-1,1), spin_y_test))
+  print(model_spin.coef_)
+  print(model_spin.intercept_)
+  energy_Rs_1 = energy_Rs_avg[:-1]
+  energy_Rs_2 = energy_Rs_avg[1:]
+  energy_x_train, energy_x_test, energy_y_train, energy_y_test = train_test_split(energy_Rs_1, energy_Rs_2, test_size = 0.33, random_state = 42)
+  model_energy = LinearRegression().fit(energy_x_train.reshape(-1,1), energy_y_train)
+  print(model_energy.score(energy_x_test.reshape(-1,1), energy_y_test))
+  print(model_energy.coef_)
+  print(model_energy.intercept_)
+
+#Testing model accurary while removing from the centre of the lattice
+def model_centre():
+  spin_Rs_avg = np.zeros(41)
+  energy_Rs_avg = np.zeros(41)
+  for i in range(10):
+    Rs = np.arange(0,401,10)
+    spin_Rs = []
+    energy_Rs = []
+    for R in Rs:
+      spins, energies = metropolis_centre(lattice_p, 1000000, B, E, get_energy(lattice_p), R)
+      spin_Rs.append((np.array(spins[-100000:])/N**2).mean())
+      energy_Rs.append((np.array(energies[-100000:])/N**2).mean())
+    spin_Rs_avg += spin_Rs
+    energy_Rs_avg += energy_Rs
+  spin_Rs_avg /= 10
+  energy_Rs_avg /= 10
+  spin_Rs_1 = spin_Rs_avg[:-1]
+  spin_Rs_2 = spin_Rs_avg[1:]
+  spin_x_train, spin_x_test, spin_y_train, spin_y_test = train_test_split(spin_Rs_1, spin_Rs_2, test_size = 0.33, random_state = 42)
+  model_spin = LinearRegression().fit(spin_x_train.reshape(-1,1), spin_y_train)
+  print(model_spin.score(spin_x_test.reshape(-1,1), spin_y_test))
+  print(model_spin.coef_)
+  print(model_spin.intercept_)
+  energy_Rs_1 = energy_Rs_avg[:-1]
+  energy_Rs_2 = energy_Rs_avg[1:]
+  energy_x_train, energy_x_test, energy_y_train, energy_y_test = train_test_split(energy_Rs_1, energy_Rs_2, test_size = 0.33, random_state = 42)
+  model_energy = LinearRegression().fit(energy_x_train.reshape(-1,1), energy_y_train)
+  print(model_energy.score(energy_x_test.reshape(-1,1), energy_y_test))
+  print(model_energy.coef_)
+  print(model_energy.intercept_)
+
+#Testing model accurary while removing from outside the centre of the lattice
+def model_edge():
+  spin_Rs_avg = np.zeros(41)
+  energy_Rs_avg = np.zeros(41)
+  for i in range(10):
+    Rs = np.arange(0,401,10)
+    spin_Rs = []
+    energy_Rs = []
+    for R in Rs:
+      spins, energies = metropolis_edge(lattice_p, 1000000, B, E, get_energy(lattice_p), R)
+      spin_Rs.append((np.array(spins[-100000:])/N**2).mean())
+      energy_Rs.append((np.array(energies[-100000:])/N**2).mean())
+    spin_Rs_avg += spin_Rs
+    energy_Rs_avg += energy_Rs
+  spin_Rs_avg /= 10
+  energy_Rs_avg /= 10
+  spin_Rs_1 = spin_Rs_avg[:-1]
+  spin_Rs_2 = spin_Rs_avg[1:]
+  spin_x_train, spin_x_test, spin_y_train, spin_y_test = train_test_split(spin_Rs_1, spin_Rs_2, test_size = 0.33, random_state = 42)
+  model_spin = LinearRegression().fit(spin_x_train.reshape(-1,1), spin_y_train)
+  print(model_spin.score(spin_x_test.reshape(-1,1), spin_y_test))
+  print(model_spin.coef_)
+  print(model_spin.intercept_)
+  energy_Rs_1 = energy_Rs_avg[:-1]
+  energy_Rs_2 = energy_Rs_avg[1:]
+  energy_x_train, energy_x_test, energy_y_train, energy_y_test = train_test_split(energy_Rs_1, energy_Rs_2, test_size = 0.33, random_state = 42)
+  model_energy = LinearRegression().fit(energy_x_train.reshape(-1,1), energy_y_train)
+  print(model_energy.score(energy_x_test.reshape(-1,1), energy_y_test))
+  print(model_energy.coef_)
